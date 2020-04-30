@@ -3,27 +3,27 @@
 [Quorum](https://github.com/jpmorganchase/quorum) on [Kubernetes](https://github.com/kubernetes/kubernetes),
 including:
 
-* [Quickest Start](#quickest-start):    
-  To deploy 7nodes Tessera with IBFT run: `./quickest-start.sh`  
-  To create and deploy an N node Quorum network run: `./quickest-start.sh $NUM`   
+* [Quickest Start](#quickest-start):
+  To deploy 7nodes Tessera with IBFT run: `./quickest-start.sh`
+  To create and deploy an N node Quorum network run: `./quickest-start.sh $NUM`
   To terminate the network run `./quickest-stop.sh`
 
-* [7 Node Example On K8s](docs/7nodes-on-k8s.md): &nbsp;&nbsp; runs [quorum-examples](https://github.com/jpmorganchase/quorum-examples/tree/master/examples/7nodes) on K8s.  
-  🎬 &nbsp;&nbsp;[7nodes Demo](#-step-1-deploy-7nodes)  
+* [7 Node Example On K8s](docs/7nodes-on-k8s.md): &nbsp;&nbsp; runs [quorum-examples](https://github.com/jpmorganchase/quorum-examples/tree/master/examples/7nodes) on K8s.
+  🎬 &nbsp;&nbsp;[7nodes Demo](#-step-1-deploy-7nodes)
 
 * [N Node Quorum Network On K8s](#generating-quorum-and-k8s-resources-from-custom-configs):
   Generates the necessary Quorum resources (keys, configs - genesis, istanbul, etc.) and Kubernetes API resource yaml
-  for a configurable N node Quorum Network based on a minimal config [`qubernetes.yaml`](qubernetes.yaml).    
+  for a configurable N node Quorum Network based on a minimal config [`qubernetes.yaml`](qubernetes.yaml).
 
 
 
-## Additional Resources   
+## Additional Resources
 * [Quickstart With Minikube](docs/minikube-docs.md):
   Quickstart for running a Quorum network on minikube.
 
 * [Running On GKE](docs/gke-hosted-kubernetes.md)
 
-* [Quorum Network From Existing Quorum Resources](docs/qubernetes-config.md#generating-kubernetes-object-yaml-from-existing-quorum-resources):  
+* [Quorum Network From Existing Quorum Resources](docs/qubernetes-config.md#generating-kubernetes-object-yaml-from-existing-quorum-resources):
 Generates Kuberenetes API resources from existing Quorum resources: keys, config, etc.
 
 ## Quickest Start
@@ -88,7 +88,7 @@ connecting to POD [quorum-node1-deployment-676684fddf-9gwxk]
 / > ./runscript.sh private_contract.js
 
 # you should now see the transactions go through
-# note: if you are running IBFT (Istanbul BFT consensus) the blockNumber will increment at the user defined  
+# note: if you are running IBFT (Istanbul BFT consensus) the blockNumber will increment at the user defined
 # (configurable) time interval.
 
 / > geth attach $QHOME/dd/geth.ipc
@@ -102,7 +102,7 @@ connecting to POD [quorum-node1-deployment-676684fddf-9gwxk]
 
 ```
 
-There is also a helper to attach to the geth console directly.   
+There is also a helper to attach to the geth console directly.
 🎬 &nbsp; &nbsp;  [Geth Attach Demo](#-step-3-attach-to-the-geth-console)
 ```shell
 # from the root of the quberenetes repository
@@ -116,7 +116,7 @@ qubernetes $>  ./geth-attach node1
 
 ```
 
-## Demos  
+## Demos
 
 ### 🎥 Step 1 Deploy 7nodes
 Starts Kind K8s cluster (bottom screen) & deploy 7nodes (IBFT & Tessera)
@@ -295,3 +295,4 @@ and is a good read to understand the different components.
 
 ## Getting Help
 Stuck at some step? Please join our <a href="https://www.goquorum.com/slack-inviter" target="_blank" rel="noopener">slack community</a> for support.
+
