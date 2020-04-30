@@ -1,7 +1,7 @@
 ## Qubernetes
 
 [Quorum](https://github.com/jpmorganchase/quorum) on [Kubernetes](https://github.com/kubernetes/kubernetes),
-including: 
+including:
 
 * [Quickest Start](#quickest-start):    
   To deploy 7nodes Tessera with IBFT run: `./quickest-start.sh`  
@@ -10,30 +10,30 @@ including:
 
 * [7 Node Example On K8s](docs/7nodes-on-k8s.md): &nbsp;&nbsp; runs [quorum-examples](https://github.com/jpmorganchase/quorum-examples/tree/master/examples/7nodes) on K8s.  
   🎬 &nbsp;&nbsp;[7nodes Demo](#-step-1-deploy-7nodes)  
-  
+
 * [N Node Quorum Network On K8s](#generating-quorum-and-k8s-resources-from-custom-configs):
-  Generates the necessary Quorum resources (keys, configs - genesis, istanbul, etc.) and Kubernetes API resource yaml 
+  Generates the necessary Quorum resources (keys, configs - genesis, istanbul, etc.) and Kubernetes API resource yaml
   for a configurable N node Quorum Network based on a minimal config [`qubernetes.yaml`](qubernetes.yaml).    
-   
-   
+
+
 
 ## Additional Resources   
 * [Quickstart With Minikube](docs/minikube-docs.md):
   Quickstart for running a Quorum network on minikube.
- 
-* [Running On GKE](docs/gke-hosted-kubernetes.md) 
+
+* [Running On GKE](docs/gke-hosted-kubernetes.md)
 
 * [Quorum Network From Existing Quorum Resources](docs/qubernetes-config.md#generating-kubernetes-object-yaml-from-existing-quorum-resources):  
 Generates Kuberenetes API resources from existing Quorum resources: keys, config, etc.
 
 ## Quickest Start
-Requires docker to be running on your machine with sufficient memory ~8GB for a 7 node cluster. 
+Requires docker to be running on your machine with sufficient memory ~8GB for a 7 node cluster.
 ```bash
 # default 7nodes
 $> ./quickest-start.sh
 ```
 
-```bash 
+```bash
 # N node network
 $> ./quickest-start.sh 3
 ```
@@ -127,25 +127,25 @@ continued from above
 [![qubes-7nodes-run-contract](docs/resources/7node-run-contracts-play.png)](https://jpmorganchase.github.io/qubernetes/resources/7node-run-contracts.webm)
 
 ### 🎥 Step 3: Attach to the geth console
-continued from above 
+continued from above
 part 1 attach to geth from inside the container
 part 2 use helper `./geth-attach node1`
 [![qubes-7nodes-attach-geth](docs/resources/7node-attach-geth-play.png)](https://jpmorganchase.github.io/qubernetes/resources/7node-attach-geth.webm)
 
 ## Generating Quorum and K8s Resources From Custom Configs
 
-Qubernetes enables the creation of customized Quorum networks run on Kubernetes, providing a configurable number of Quorum and Transaction Manager nodes, and creating the associated genesis config, transaction manager config, permissioned-nodes.json, required keys, services, etc. to start the network. 
+Qubernetes enables the creation of customized Quorum networks run on Kubernetes, providing a configurable number of Quorum and Transaction Manager nodes, and creating the associated genesis config, transaction manager config, permissioned-nodes.json, required keys, services, etc. to start the network.
 
 If you have Docker installed, you are all set! Use the [Docker Bootstrap Container](#docker-bootstrap-container).
 
 If you do not wish to install Docker, follow the instructions in [Install Prerequisites without Docker](docs/installing-on-host.md).
 
-Once you have the prerequisites set up see [Modifying The Qubernetes Config File](#modifying-the-qubernetes-config-file) for more 
+Once you have the prerequisites set up see [Modifying The Qubernetes Config File](#modifying-the-qubernetes-config-file) for more
 information about configuring a custom deployment.
 
 ### Docker Bootstrap Container
 
-The Docker container `quorumengineering/qubernetes` has the necessary binaries installed to generate the necessary Quorum resources. 
+The Docker container `quorumengineering/qubernetes` has the necessary binaries installed to generate the necessary Quorum resources.
 If you have docker running, you don't have to worry about installing anything else.
 
 Usage:
@@ -153,26 +153,26 @@ Usage:
 > **Note:** `qubernetes.yaml` is not added to the docker container, as this file will change between various deployments.
 
 The `qubernetes.yaml` file and the desired `out` directory will need to be mounted on the `quorumengineering/qubernetes` container using `-v $PATH/ON/HOST/qubernetes.yaml:$PATH/ON/CONTAINTER/qubernetes.yaml`, e.g. `-v $(pwd)/cool-qubernetes.yaml:/qubernetes/qubernetes.yaml`, see below:
- 
-1.  Use the default `qubernetes.yaml` in the base of the qubernetes repository.  You may edit this file to create your custom quorum network 
+
+1.  Use the default `qubernetes.yaml` in the base of the qubernetes repository.  You may edit this file to create your custom quorum network
 ```bash
 $> git clone https://github.com/jpmorganchase/qubernetes.git
 $> cd qubernetes
-qubernetes $> docker run --rm -it -v $(pwd)/qubernetes.yaml:/qubernetes/qubernetes.yaml -v $(pwd)/out:/qubernetes/out  quorumengineering/qubernetes ./quorum-init qubernetes.yaml
-qubernetes $> ls out 
-``` 
+qubernetes $> docker run --rm -it -v $(pwd)/qubernetes.yaml:/qubernetes/qubernetes.yaml -v $(pwd)/out:/qubernetes/out  quorumengineering/qubernetes ./qube-init qubernetes.yaml
+qubernetes $> ls out
+```
 [![docker-quberentes-boot-1](docs/resources/docker-quberentes-boot-1-play.png)](https://jpmorganchase.github.io/qubernetes/resources/docker-quberentes-boot-1.webm)
 2.   Generate Quorum and Kubernetes resources files from any directory using a custom configuration file, e.g. `cool-qubernetes.yaml`,
-you do not need to clone the repo, but mount the file `cool-qubernetes.yaml` and the `out` directory on the `quorumengineering/qubernetes` container, 
+you do not need to clone the repo, but mount the file `cool-qubernetes.yaml` and the `out` directory on the `quorumengineering/qubernetes` container,
 so the resources will be available after the container exits.
 ```shell
-# from some directory containing a config file cool-qubernetes.yaml 
+# from some directory containing a config file cool-qubernetes.yaml
 myDir$> ls
 cool-qubernetes.yaml
 
 # run docker and mount cool-qubernetes.yaml and the out directory
-# a prompt will appear enter 1 to Delete the 'out' directory and generate new resources. 
-myDir$> docker run --rm -it -v $(pwd)/cool-qubernetes.yaml:/qubernetes/cool-qubernetes.yaml -v $(pwd)/out:/qubernetes/out quorumengineering/qubernetes ./quorum-init cool-qubernetes.yaml
+# a prompt will appear enter 1 to Delete the 'out' directory and generate new resources.
+myDir$> docker run --rm -it -v $(pwd)/cool-qubernetes.yaml:/qubernetes/cool-qubernetes.yaml -v $(pwd)/out:/qubernetes/out quorumengineering/qubernetes ./qube-init cool-qubernetes.yaml
 using config file: cool-qubernetes.yaml
 
  The 'out' directory already exist.
@@ -182,7 +182,7 @@ using config file: cool-qubernetes.yaml
  [2] Update / add nodes that don't already exist.
  [3] Cancel.
 
-1 
+1
 
 # The generated files and the k8s-yaml will be in the out directory.
 myDir$> ls
@@ -191,16 +191,16 @@ cool-qubernetes.yaml out
 ```
 [![docker-quberentes-boot-2](docs/resources/docker-quberentes-boot-2-play.png)](https://jpmorganchase.github.io/qubernetes/resources/docker-quberentes-boot-2.webm)
 
-3.  Exec into the `quorumengineering/qubernetes` container to run commands inside. This is useful for testing changes 
-to the local ruby generator files. 
+3.  Exec into the `quorumengineering/qubernetes` container to run commands inside. This is useful for testing changes
+to the local ruby generator files.
 In this example, we are running the container from inside the base qubernetes directory, and mounting the entire directory,
 so it is as if we were running on our local host: the files from the host will be used, and generated files will be continue to exist after the container exists.
 
 ```
 $> git clone https://github.com/jpmorganchase/qubernetes.git
-$> cd qubernetes 
+$> cd qubernetes
 qubernetes $> docker run --rm -it -v $(pwd):/qubernetes -ti quorumengineering/qubernetes
-root@4eb772b14086:/qubernetes# ./quorum-init
+root@4eb772b14086:/qubernetes# ./qube-init
 
 root@4eb772b14086:/qubernetes# ls out/
 00-quorum-persistent-volumes.yaml  01-quorum-genesis.yaml  02-quorum-shared-config.yaml  03-quorum-services.yaml  04-quorum-keyconfigs.yaml  config  deployments
@@ -211,38 +211,38 @@ root@4eb772b14086:/qubernetes# ls out/
 example [qubernetes.yaml](qubernetes.yaml)
 ![qubernetes-yaml-marked](docs/resources/qubernetes-yaml-marked.png)
 
-The most natural thing to modify in your [`qubernetes.yaml`](qubernetes.yaml) is the number of nodes you wish to deploy: 
+The most natural thing to modify in your [`qubernetes.yaml`](qubernetes.yaml) is the number of nodes you wish to deploy:
 ```yaml
 # number of nodes to deploy
 nodes:
   number: 8
 ```
 
-2. Run `./quorum-init` to generate everything needed for the quorum deployment: quorum keys, genesis.json, istanbul-config.json, permissioned-nodes.json, etc. 
-  
+2. Run `./qube-init` to generate everything needed for the quorum deployment: quorum keys, genesis.json, istanbul-config.json, permissioned-nodes.json, etc.
+
  These resources will be written and read from the directories specified in the `qubernetes.yaml` file.
  The default [`qubernetes.yaml`](qubernetes.yaml) is configured to write theses to the `./out/config` directory.
  ```yaml
- Key_Dir_Base: out/config 
+ Key_Dir_Base: out/config
  Permissioned_Nodes_File: out/config/permissioned-nodes.json
  Genesis_File: out/config/genesis.json
  ```
- 
+
  ```shell
- 
+
  ## in this case, an out directory exists, so select `1`.
- $> ./quorum-init
+ $> ./qube-init
  The 'out' directory already exist.
  Please select the action you wish to take:
 
  [1] Delete the 'out' directory and generate new resources.
  [2] Update / add nodes that don't already exist.
  [3] Cancel.
- 
+
  ..
- 
+
  Creating all new resources.
- 
+
    Generating keys...
  INFO [01-14|17:05:09.402] Maximum peer count                       ETH=25 LES=0 total=25
  INFO [01-14|17:05:11.302] Maximum peer count                       ETH=25 LES=0 total=25
@@ -267,7 +267,7 @@ $> kubectl apply -f out
 ```
 
 3. Once the Quorum resources have been generated, the `./qubernetes` command can be run to generate variations of the Kubernetes
-Resources, e.g. `ClusterIP` vs `NodePort`. The `./qubernetes` command can be run multiple times and is idempotent as long as the 
+Resources, e.g. `ClusterIP` vs `NodePort`. The `./qubernetes` command can be run multiple times and is idempotent as long as the
 underlying Quorum resources do not change.
 
 ```shell
@@ -283,16 +283,15 @@ $> ./qubernetes
 $> kubectl apply -f out
 ```
 
-5. Deleting the deployment 
+5. Deleting the deployment
 
 ```shell
 $> kubectl delete -f out
 ```
 
-## Thanks! And Additional Resources 
+## Thanks! And Additional Resources
 Thanks to [Maximilian Meister blog and code](https://medium.com/@cryptoctl) which provided an awesome starting point!
 and is a good read to understand the different components.
 
 ## Getting Help
 Stuck at some step? Please join our <a href="https://www.goquorum.com/slack-inviter" target="_blank" rel="noopener">slack community</a> for support.
-
